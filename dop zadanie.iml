@@ -1,11 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-    </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-</module>
+class LogicalFunctionTruthTable {
+    public static void main(String[] args) {
+        System.out.println("x | y | z | w | ¬y | ¬z | ¬x | ¬z ≡ w | x → (¬z ≡ w) | ¬y ∧ (x → (¬z ≡ w)) | ¬y ∧ (x → (¬z ≡ w)) ∨ z");
+        System.out.println("-----------------------------------------------------------------------------------------------");
+
+        // Перебираем все возможные комбинации переменных (0 и 1)
+        for (int x = 0; x <= 1; x++) {
+            for (int y = 0; y <= 1; y++) {
+                for (int z = 0; z <= 1; z++) {
+                    for (int w = 0; w <= 1; w++) {
+
+                        // Вычисляем промежуточные значения
+                        int notY = y == 0 ? 1 : 0; // ¬y
+                        int notZ = z == 0 ? 1 : 0; // ¬z
+                        int notX = x == 0 ? 1 : 0; // ¬x
+                        int notZEquivalentW = (notZ == w) ? 1 : 0; // ¬z ≡ w
+                        int xImplicationNotZEqW = (notX == 1 || notZEquivalentW == 1) ? 1 : 0; // x → (¬z ≡ w)
+                        int finalExpression = (notY == 1 && xImplicationNotZEqW == 1) ? 1 : 0; // ¬y ∧ (x → (¬z ≡ w))
+                        finalExpression = (finalExpression == 1 || z == 1) ? 1 : 0; // (¬y ∧ (x → (¬z ≡ w))) ∨ z
+
+                        // Выводим результаты таблицы истинности
+                        System.out.printf("%d | %d | %d | %d |  %d |  %d |  %d |   %d    |      %d       |          %d            |            %d\n",
+                                x, y, z, w, notY, notZ, notX, notZEquivalentW, xImplicationNotZEqW, finalExpression, finalExpression);
+                    }
+                }
+            }
+        }
+    }
+}
